@@ -2,25 +2,10 @@ package initialize
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
+
+	"github.com/shoebilyas123/shit/common"
 )
-
-func CheckDirExistence(path string) bool {
-	if _, err := os.Open(path); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
-}
-
-func HandleCreateDir(path string, perm fs.FileMode) {
-	err := os.Mkdir(path, 0755)
-
-	if os.IsExist(err) {
-		panic("Error: Cannot create the target directory")
-	}
-}
 
 func Init(argvs []string) {
 	pwd, err := os.Getwd()
@@ -38,8 +23,8 @@ func Init(argvs []string) {
 	// If a name is provided create that named directory
 
 	if len(argvs) > 0 && argvs[0] != "." {
-		if !CheckDirExistence(target_dir) {
-			HandleCreateDir(target_dir, 0755)
+		if !common.CheckDirExistence(target_dir) {
+			common.HandleCreateDir(target_dir, 0755)
 		} else {
 			// TODO: Will ask if you want to init that directory?
 			// Check for directory name clashes
@@ -48,12 +33,14 @@ func Init(argvs []string) {
 	}
 
 	// If the target_dir already has a .shit folder throw appropriate error
-	if CheckDirExistence(target_dir + "/.shit") {
+	if common.CheckDirExistence(target_dir + "/.shit") {
 		panic("Error: Cannot overwrite an already initialized <Repository>")
 	}
 
-	// In that directory create a .shit directory
-	HandleCreateDir(target_dir+"/.shit", 0755)
-	// In that .shit directory create an objs directory
-	HandleCreateDir(target_dir+"/.shit/objs", 0755)
+	// Create a .shit directory followed by a child objects folder
+	target_dir += "/.shit"
+	common.HandleCreateDir(target_dir, 0755)
+
+	common.HandleCreateDir(target_dir+"/objects", 0755)
+	common.HandleCreateFile(target_dir+"/objects", "HEAD")
 }

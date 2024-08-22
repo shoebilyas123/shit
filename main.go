@@ -6,6 +6,7 @@ import (
 
 	"github.com/shoebilyas123/shit/commands"
 	"github.com/shoebilyas123/shit/initialize"
+	"github.com/shoebilyas123/shit/object"
 )
 
 // The init pattern that we are looking for: shit (init)(argvs[1])
@@ -22,5 +23,7 @@ func main() {
 	switch base_cmd {
 	case commands.INIT:
 		initialize.Init(argvs[2:])
+	case commands.HASH:
+		object.HashObject(argvs[2])
 	}
 }
