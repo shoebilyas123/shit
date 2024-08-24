@@ -66,7 +66,7 @@ func UpdateIndexAdd(argvs []string) {
 		filename = argvs[3]
 	default:
 		filename = argvs[0]
-		sha_1 = object.HashObject([]string{filename})
+		sha_1 = object.HashObject([]string{filename}, "blob")
 		mode = 100644
 	}
 

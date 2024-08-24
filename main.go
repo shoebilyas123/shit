@@ -25,8 +25,10 @@ func main() {
 	case commands.INIT:
 		initialize.Init(argvs[2:])
 	case commands.HASH:
-		object.HashObject(argvs[2:])
+		object.HashObject(argvs[2:], "blob")
 	case commands.UPDATE_INDEX:
 		index.UpdateIndex(argvs[2:])
+	case commands.WRITE_TREE:
+		object.WriteTree()
 	}
 }

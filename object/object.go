@@ -13,7 +13,7 @@ import (
 )
 
 // git hash-object filepath.txt
-func HashObject(argvs []string) string {
+func HashObject(argvs []string, obj_type string) string {
 	if !common.CheckShitInit() {
 		fmt.Println("fatal: not a shit repository (or any of the parent directories): .shit")
 		return ""
@@ -32,7 +32,7 @@ func HashObject(argvs []string) string {
 	}
 
 	content := common.ReadFileContents(filepath)
-	header := fmt.Sprintf("blob %d::\u0000", len(content))
+	header := fmt.Sprintf("%s %d::\u0000", obj_type, len(content))
 
 	store := header + content
 	h := sha1.New()
@@ -65,4 +65,11 @@ func HashObject(argvs []string) string {
 
 	fmt.Println(sha1)
 	return sha1
+}
+
+func WriteTree() string {
+	sha_1 := HashObject([]string{"/.shit/index"}, "tree")
+	fmt.Println(sha_1)
+
+	return sha_1
 }
