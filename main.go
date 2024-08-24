@@ -19,11 +19,10 @@ func main() {
 	}
 
 	base_cmd := argvs[1]
-	fmt.Printf("%+v\n", argvs[2:])
 	switch base_cmd {
 	case commands.INIT:
 		initialize.Init(argvs[2:])
 	case commands.HASH:
-		object.HashObject(argvs[2])
+		object.HashObject(argvs[2:])
 	}
 }

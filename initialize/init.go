@@ -42,5 +42,5 @@ func Init(argvs []string) {
 	common.HandleCreateDir(target_dir, 0755)
 
 	common.HandleCreateDir(target_dir+"/objects", 0755)
-	common.HandleCreateFile(target_dir+"/objects", "HEAD")
+	common.HandleCreateFile(target_dir+"/", "HEAD")
 }

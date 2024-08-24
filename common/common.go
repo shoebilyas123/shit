@@ -41,3 +41,7 @@ func ReadFileContents(path string) string {
 
 	return string(contents)
 }
+
+func CheckShitInit() bool {
+	return CheckDirExistence("./.shit")
+}
