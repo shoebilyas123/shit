@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/shoebilyas123/shit/commands"
+	"github.com/shoebilyas123/shit/index"
 	"github.com/shoebilyas123/shit/initialize"
 	"github.com/shoebilyas123/shit/object"
 )
@@ -19,10 +20,13 @@ func main() {
 	}
 
 	base_cmd := argvs[1]
+	fmt.Printf("%s\n", base_cmd)
 	switch base_cmd {
 	case commands.INIT:
 		initialize.Init(argvs[2:])
 	case commands.HASH:
 		object.HashObject(argvs[2:])
+	case commands.UPDATE_INDEX:
+		index.UpdateIndex(argvs[2:])
 	}
 }
