@@ -123,12 +123,8 @@ func CatFile(argvs []string) (string, error) {
 
 	io.Copy(buff, r)
 	store := buff.String()
-	header := strings.Split(store, "::")[0]
-	content := strings.Split(store, "::")[1]
 
-	fmt.Printf("Header:\n%s\n\n", header)
-	fmt.Printf("Content:\n%s\n\n", content)
-	return content, nil
+	return store, nil
 }
 
 // Scenario 1: This is the first update-index and the index file is empty;
@@ -219,15 +215,55 @@ func UpdateIndex(argvs []string) {
 }
 
 // [<tree_id>, |< -p > <sha_1>|, < -m > "commit message"]
+// If the index hasn't changed, that is, an sha_1 already exists, don't commit, show approp. message instead
 func CommitTree(treesha_1, parentsha_1, commit_msg string) string {
 	var commit_content string
 	if len(parentsha_1) < 1 {
-		commit_content = fmt.Sprintf("tree %s\nauthor %s <%s> %d", treesha_1, "shoebilyas123", "shoebilyas123@gmail.com", time.Now().UnixMilli())
+		commit_content = fmt.Sprintf("tree %s\nauthor %s <%s> %d\n\t%s", treesha_1, "shoebilyas123", "shoebilyas123@gmail.com", time.Now().UnixMilli(), commit_msg)
 	} else {
-		commit_content = fmt.Sprintf("tree %s\nparent %s\nauthor %s <%s> %d", treesha_1, parentsha_1, "shoebilyas123", "shoebilyas123@gmail.com", time.Now().UnixMilli())
+		commit_content = fmt.Sprintf("tree %s\nparent %s\nauthor %s <%s> %d\n\t%s", treesha_1, parentsha_1, "shoebilyas123", "shoebilyas123@gmail.com", time.Now().UnixMilli(), commit_msg)
 	}
 
 	commit_hash := HashObject([]string{}, "tree", commit_content)
 	fmt.Println(commit_hash)
-	return ""
+	return commit_hash
+}
+
+func UpdateRef(path string, commit_sha string) bool {
+	path_arr := strings.Split(path, "/")
+	dir_path := "./.shit/" + strings.Join(path_arr[0:len(path_arr)-1], "/")
+	filename := path_arr[len(path_arr)-1]
+
+	fmt.Printf("%s::%s\n", dir_path, filename)
+
+	if !common.CheckDirExistence(path) {
+		common.HandleCreateFile(dir_path, filename)
+	}
+
+	os.WriteFile("./.shit/"+path, []byte(commit_sha), 0644)
+
+	return true
+
+}
+
+// shit log <ref_name>
+func Log(ref, commit_sha string) {
+	if len(ref) > 0 {
+		if !common.CheckDirExistence("./.shit/" + ref) {
+			fmt.Println("Fatal: ref does not exist")
+			return
+		}
+
+		commit_id, _ := os.ReadFile("./.shit/" + ref)
+		Log("", string(commit_id))
+	} else if len(commit_sha) > 0 {
+		store, _ := CatFile([]string{"", commit_sha})
+		parent := (strings.Split(strings.Split(store, "::")[1], "\n")[1])
+
+		fmt.Printf("Commit: %s\n%s\n\n-----\n", commit_sha, strings.Split(store, "::")[1])
+		if strings.Split(parent, " ")[0] == "parent" {
+			Log("", strings.Split(parent, " ")[1])
+		}
+	}
+
 }

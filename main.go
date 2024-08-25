@@ -66,5 +66,9 @@ func main() {
 		}
 
 		plumbings.CommitTree(tree_sha1, parent_sha1, commit_msg)
+	case commands.UPDATE_REF:
+		plumbings.UpdateRef(argvs[2], argvs[3])
+	case commands.LOG:
+		plumbings.Log(argvs[2], "")
 	}
 }
