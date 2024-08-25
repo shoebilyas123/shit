@@ -20,7 +20,6 @@ func main() {
 	}
 
 	base_cmd := argvs[1]
-	fmt.Printf("%s\n", base_cmd)
 	switch base_cmd {
 	case commands.INIT:
 		initialize.Init(argvs[2:])
@@ -30,5 +29,7 @@ func main() {
 		index.UpdateIndex(argvs[2:])
 	case commands.WRITE_TREE:
 		object.WriteTree()
+	case commands.CAT_FILE:
+		object.CatFile(argvs[2:])
 	}
 }

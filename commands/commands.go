@@ -5,4 +5,5 @@ const (
 	HASH         = "hash-object"
 	UPDATE_INDEX = "update-index"
 	WRITE_TREE   = "write-tree"
+	CAT_FILE     = "cat-file"
 )

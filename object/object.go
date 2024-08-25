@@ -12,6 +12,11 @@ import (
 	"github.com/shoebilyas123/shit/common"
 )
 
+const (
+	BLOB_MODE = 100644
+	TREE_MODE = 040000
+)
+
 // git hash-object filepath.txt
 func HashObject(argvs []string, obj_type string) string {
 	if !common.CheckShitInit() {
@@ -46,7 +51,7 @@ func HashObject(argvs []string, obj_type string) string {
 	var comp_content bytes.Buffer
 
 	zlibwriter := zlib.NewWriter(&comp_content)
-	zlibwriter.Write([]byte(sha1))
+	zlibwriter.Write([]byte(store))
 	zlibwriter.Close()
 
 	if !common.CheckDirExistence(dir_p) {
@@ -72,4 +77,24 @@ func WriteTree() string {
 	fmt.Println(sha_1)
 
 	return sha_1
+}
+
+func CatFile(argvs []string) (string, error) {
+	filepath := fmt.Sprintf("./.shit/objects/%s/%s", argvs[1][0:2], argvs[1][2:])
+
+	fbytes, _ := os.ReadFile(filepath)
+	buff := bytes.NewBuffer(fbytes)
+	r, err := zlib.NewReader(buff)
+
+	if err != nil {
+		return "", err
+	}
+
+	io.Copy(buff, r)
+	store := buff.String()
+	// header := strings.Split(store, "::")[0]
+	content := strings.Split(store, "::")[1]
+
+	fmt.Print(content)
+	return content, nil
 }
