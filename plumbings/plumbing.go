@@ -267,3 +267,7 @@ func Log(ref, commit_sha string) {
 	}
 
 }
+
+func CheckoutBranch(branch_name string) {
+
+}

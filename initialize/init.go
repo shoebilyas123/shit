@@ -43,4 +43,15 @@ func Init(argvs []string) {
 
 	common.HandleCreateDir(target_dir+"/objects", 0755)
 	common.HandleCreateFile(target_dir+"/", "HEAD")
+
+	common.HandleCreateDir(target_dir+"/refs", 0755)
+	common.HandleCreateDir(target_dir+"/refs/heads", 0755)
+
+	head_ref := "ref: refs/heads/main"
+
+	err = os.WriteFile(target_dir+"/HEAD", []byte(head_ref), 0644)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 }
