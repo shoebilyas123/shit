@@ -21,6 +21,8 @@ The current version of SHIT is built solely upon, what is referred to in git ter
 7. `shit update-ref <REF_PATH> <Commit_SHA>`: Creates a link between the provided ref and the provided commit SHA_1
 8. `shit log`: Logs all the commits starting from latest. 
 
+Ref: For better understanding of the commands and the working, read Git Internals available on the official Git website.
+
 ## Porcelain
 
 In development. To be added soon
